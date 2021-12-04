@@ -69,6 +69,38 @@ make -j `nproc`
   average w 0.000110921
   ```
 
+* communicate with simulator
+  - receive
+    ```json
+    [
+      "telemetry",
+      {
+        "sense_x":"190.1224",
+        "sense_y":"24.2010",
+        "sense_theta":"0.0756",
+        "previous_velocity":"11.1880",
+        "previous_yawrate":"-0.0122",
+        "sense_observations_x":"-12.7605 15.9672 4.8438 -18.3355 22.9478 -40.5985 42.4341 -20.6061 ",
+        "sense_observations_y":"4.4701 3.7626 -15.8923 5.8343 -33.4763 -12.9406 4.7422 -38.6080 "
+      }
+    ]
+    ```
+  - transmit
+    ```json
+    42
+    [
+      "best_particle",
+      {
+        "best_particle_associations":"",
+        "best_particle_sense_x":"",
+        "best_particle_sense_y":"",
+        "best_particle_theta":0.0658322354423997,
+        "best_particle_x":190.052455793541,
+        "best_particle_y":24.398365293091
+      }
+    ]
+    ```
+
 ## Others
 
 This is the particle filter project. If you want to know the localisation from scratch please visit my article in medium.
