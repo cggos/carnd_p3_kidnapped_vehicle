@@ -55,6 +55,7 @@ int main() {
     if (length && length > 2 && data[0] == '4' && data[1] == '2') {
       auto s = hasData(std::string(data));
       if (s != "") {
+        std::cout << s << std::endl;
         auto j = json::parse(s);
         std::string event = j[0].get<std::string>();
 
@@ -69,27 +70,23 @@ int main() {
 
             pf.init(sense_x, sense_y, sense_theta, sigma_pos);
           } else {
-            // Predict the vehicle's next state from previous (noiseless
-            // control) data.
+            // Predict the vehicle's next state from previous (noiseless control) data.
             double previous_velocity = std::stod(j[1]["previous_velocity"].get<std::string>());
             double previous_yawrate = std::stod(j[1]["previous_yawrate"].get<std::string>());
 
             pf.prediction(delta_t, sigma_pos, previous_velocity, previous_yawrate);
           }
 
-          // receive noisy observation data from the simulator
-          // sense_observations in JSON format
+          // receive noisy observation data from the simulator sense_observations in JSON format
           // [{obs_x,obs_y},{obs_x,obs_y},...{obs_x,obs_y}]
           vector<LandmarkObs> noisy_observations;
           string sense_observations_x = j[1]["sense_observations_x"];
           string sense_observations_y = j[1]["sense_observations_y"];
-
           std::vector<float> x_sense, y_sense;
           std::istringstream iss_x(sense_observations_x);
           std::istringstream iss_y(sense_observations_y);
           std::copy(std::istream_iterator<float>(iss_x), std::istream_iterator<float>(), std::back_inserter(x_sense));
           std::copy(std::istream_iterator<float>(iss_y), std::istream_iterator<float>(), std::back_inserter(y_sense));
-
           for (int i = 0; i < x_sense.size(); i++) {
             LandmarkObs obs;
             obs.x = x_sense[i];
@@ -128,7 +125,7 @@ int main() {
           msgJson["best_particle_sense_y"] = pf.getSenseY(best_particle);
 
           auto msg = "42[\"best_particle\"," + msgJson.dump() + "]";
-          // std::cout << msg << std::endl;
+          std::cout << msg << std::endl;
           ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
         }
       } else {

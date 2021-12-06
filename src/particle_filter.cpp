@@ -23,13 +23,6 @@ using namespace std;
 static default_random_engine gen;
 
 void ParticleFilter::init(double x, double y, double theta, double std[]) {
-  // TODO: Set the number of particles. Initialize all particles to first
-  // position (based on estimates of
-  //   x, y, theta and their uncertainties from GPS) and all weights to 1.
-  // Add random Gaussian noise to each particle.
-  // NOTE: Consult particle_filter.h for more information about this method (and
-  // others in this file).
-
   if (is_initialized) {
     return;
   }
@@ -62,8 +55,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 
 void ParticleFilter::prediction(double delta_t, double std_pos[], double velocity, double yaw_rate) {
   // TODO: Add measurements to each particle and add random Gaussian noise.
-  // NOTE: When adding noise you may find std::normal_distribution and
-  // std::default_random_engine useful.
+  // NOTE: When adding noise you may find std::normal_distribution and std::default_random_engine useful.
   //  http://en.cppreference.com/w/cpp/numeric/random/normal_distribution
   //  http://www.cplusplus.com/reference/random/default_random_engine/
 
@@ -117,27 +109,13 @@ void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::ve
 
 void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
                                    const std::vector<LandmarkObs>& observations, const Map& map_landmarks) {
-  // TODO: Update the weights of each particle using a mult-variate Gaussian
-  // distribution. You can read more about this distribution here:
-  //   https://en.wikipedia.org/wiki/Multivariate_normal_distribution
-  // NOTE: The observations are given in the VEHICLE'S coordinate system. Your
-  // particles are located
-  //   according to the MAP'S coordinate system. You will need to transform
-  //   between the two systems. Keep in mind that this transformation requires
-  //   both rotation AND translation (but no scaling). The following is a good
-  //   resource for the theory:
-  //   https://www.willamette.edu/~gorr/classes/GeneralGraphics/Transforms/transforms2d.htm
-  //   and the following is a good resource for the actual equation to implement
-  //   (look at equation 3.33 http://planning.cs.uiuc.edu/node99.html
-
   // Each particle for loop
   for (int i = 0; i < num_particles; i++) {
     double paricle_x = particles[i].x;
     double paricle_y = particles[i].y;
     double paricle_theta = particles[i].theta;
 
-    // Create a vector to hold the map landmark locations predicted to be within
-    // sensor range of the particle
+    // Create a vector to hold the map landmark locations predicted to be within sensor range of the particle
     vector<LandmarkObs> predictions;
 
     // Each map landmark for loop
@@ -149,15 +127,13 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 
       // Only consider landmarks within sensor range of the particle (rather
       // than using the "dist" method considering a circular region around the
-      // particle, this considers a rectangular region but is computationally
-      // faster)
+      // particle, this considers a rectangular region but is computationally faster)
       if (fabs(lm_x - paricle_x) <= sensor_range && fabs(lm_y - paricle_y) <= sensor_range) {
         predictions.push_back(LandmarkObs{lm_id, lm_x, lm_y});
       }
     }
 
-    // Create and populate a copy of the list of observations transformed from
-    // vehicle coordinates to map coordinates
+    // Create and populate a copy of the list of observations transformed from vehicle coordinates to map coordinates
     vector<LandmarkObs> trans_os;
     for (unsigned int j = 0; j < observations.size(); j++) {
       double t_x = cos(paricle_theta) * observations[j].x - sin(paricle_theta) * observations[j].y + paricle_x;
@@ -165,9 +141,9 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
       trans_os.push_back(LandmarkObs{observations[j].id, t_x, t_y});
     }
 
-    // Data association for the predictions and transformed observations on
-    // current particle
+    // Data association for the predictions and transformed observations on current particle
     dataAssociation(predictions, trans_os);
+    
     particles[i].weight = 1.0;
     for (unsigned int j = 0; j < trans_os.size(); j++) {
       double o_x, o_y, pr_x, pr_y;

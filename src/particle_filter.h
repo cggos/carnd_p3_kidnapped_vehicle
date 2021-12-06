@@ -44,8 +44,12 @@ class ParticleFilter {
   ~ParticleFilter() {}
 
   /**
-   * init Initializes particle filter by initializing particles to Gaussian
-   *   distribution around first position and all the weights to 1.
+   * @details init Initializes particle filter by initializing particles to Gaussian distribution
+   *          around first position (based on estimates of x, y, theta and their uncertainties from GPS)
+   *          and all the weights to 1.
+   *          Add random Gaussian noise to each particle.
+   *
+   * @todo Set the number of particles.
    * @param x Initial x position [m] (simulated estimate from GPS)
    * @param y Initial y position [m]
    * @param theta Initial orientation [rad]
@@ -66,16 +70,28 @@ class ParticleFilter {
   void prediction(double delta_t, double std_pos[], double velocity, double yaw_rate);
 
   /**
-   * dataAssociation Finds which observations correspond to which landmarks
-   * (likely by using a nearest-neighbors data association).
+   * @brief Finds which observations correspond to which landmarks(likely by using a nearest-neighbors data association)
+   * 
    * @param predicted Vector of predicted landmark observations
    * @param observations Vector of landmark observations
    */
   void dataAssociation(std::vector<LandmarkObs> predicted, std::vector<LandmarkObs>& observations);
 
   /**
-   * updateWeights Updates the weights for each particle based on the likelihood
-   * of the observed measurements.
+   * @brief updateWeights Updates the weights for each particle based on the likelihood of the observed measurements.
+   * 
+   * @details The observations are given in the VEHICLE'S coordinate system. Your particles are located
+   *          according to the MAP'S coordinate system. You will need to transform between the two systems.
+   *          Keep in mind that this transformation requires both rotation AND translation (but no scaling).
+   *          The following is a good resource for the theory:
+   *            https://www.willamette.edu/~gorr/classes/GeneralGraphics/Transforms/transforms2d.htm
+   *          and the following is a good resource for the actual equation to implement
+   *            look at equation 3.33 http://planning.cs.uiuc.edu/node99.html
+   *
+   * @todo Update the weights of each particle using a mult-variate Gaussian distribution.
+   *       You can read more about this distribution here:
+   *       https://en.wikipedia.org/wiki/Multivariate_normal_distribution
+   * 
    * @param sensor_range Range [m] of sensor
    * @param std_landmark[] Array of dimension 2 [Landmark measurement
    * uncertainty [x [m], y [m]]]
