@@ -71,7 +71,7 @@ class ParticleFilter {
 
   /**
    * @brief Finds which observations correspond to which landmarks(likely by using a nearest-neighbors data association)
-   * 
+   *
    * @param predicted Vector of predicted landmark observations
    * @param observations Vector of landmark observations
    */
@@ -79,7 +79,7 @@ class ParticleFilter {
 
   /**
    * @brief updateWeights Updates the weights for each particle based on the likelihood of the observed measurements.
-   * 
+   *
    * @details The observations are given in the VEHICLE'S coordinate system. Your particles are located
    *          according to the MAP'S coordinate system. You will need to transform between the two systems.
    *          Keep in mind that this transformation requires both rotation AND translation (but no scaling).
@@ -91,19 +91,20 @@ class ParticleFilter {
    * @todo Update the weights of each particle using a mult-variate Gaussian distribution.
    *       You can read more about this distribution here:
    *       https://en.wikipedia.org/wiki/Multivariate_normal_distribution
-   * 
+   *
    * @param sensor_range Range [m] of sensor
    * @param std_landmark[] Array of dimension 2 [Landmark measurement
    * uncertainty [x [m], y [m]]]
    * @param observations Vector of landmark observations
    * @param map Map class containing map landmarks
    */
-  void updateWeights(double sensor_range, double std_landmark[], const std::vector<LandmarkObs>& observations,
+  void updateWeights(double sensor_range,
+                     double std_landmark[],
+                     const std::vector<LandmarkObs>& observations,
                      const Map& map_landmarks);
 
   /**
-   * resample Resamples from the updated set of particles to form
-   *   the new set of particles.
+   * resample Resamples from the updated set of particles to form the new set of particles.
    */
   void resample();
 
@@ -113,7 +114,9 @@ class ParticleFilter {
    * to make sure transformations are correct and assocations correctly
    * connected
    */
-  Particle SetAssociations(Particle& particle, const std::vector<int>& associations, const std::vector<double>& sense_x,
+  Particle SetAssociations(Particle& particle,
+                           const std::vector<int>& associations,
+                           const std::vector<double>& sense_x,
                            const std::vector<double>& sense_y);
 
   std::string getAssociations(Particle best);

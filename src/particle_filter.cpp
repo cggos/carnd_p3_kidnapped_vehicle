@@ -107,8 +107,10 @@ void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::ve
   }
 }
 
-void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
-                                   const std::vector<LandmarkObs>& observations, const Map& map_landmarks) {
+void ParticleFilter::updateWeights(double sensor_range,
+                                   double std_landmark[],
+                                   const std::vector<LandmarkObs>& observations,
+                                   const Map& map_landmarks) {
   // Each particle for loop
   for (int i = 0; i < num_particles; i++) {
     double paricle_x = particles[i].x;
@@ -143,7 +145,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 
     // Data association for the predictions and transformed observations on current particle
     dataAssociation(predictions, trans_os);
-    
+
     particles[i].weight = 1.0;
     for (unsigned int j = 0; j < trans_os.size(); j++) {
       double o_x, o_y, pr_x, pr_y;
@@ -203,8 +205,10 @@ void ParticleFilter::resample() {
   particles = resampledParticles;
 }
 
-Particle ParticleFilter::SetAssociations(Particle& particle, const std::vector<int>& associations,
-                                         const std::vector<double>& sense_x, const std::vector<double>& sense_y) {
+Particle ParticleFilter::SetAssociations(Particle& particle,
+                                         const std::vector<int>& associations,
+                                         const std::vector<double>& sense_x,
+                                         const std::vector<double>& sense_y) {
   // particle: the particle to assign each listed association, and association's
   // (x,y) world coordinates mapping to
   //  associations: The landmark id that goes along with each listed association
